@@ -1,0 +1,35 @@
+This is a puppet module to set up buildbot masters and slaves.
+
+It was tested on RHEL and CentOS, with buildbot 0.8.7.
+
+It assumes buildbot is installed from packages.
+It creates a user called buildbot, and creates a layout under
+  $HOME/master
+  $HOME/slave
+respectively, according to its role.
+It installs cron.d entries to ensure they get started on bootup.
+
+
+local setup
+-----------
+
+If master and slave are on the same machine, you can just test it with
+the following two defines in your node declaration:
+ 
+
+    buildbot::master { 'default': }
+    buildbot::slave { 'default': }
+
+Note that this sets up a default buildbot building pyflakes.  This default
+setup is just meant for testing, it's not secure.
+
+separate setup
+--------------
+
+Usually a slave is on a different machine than a master.
+
+
+    buildbot::slave { 'default':
+        connection => 'masterhost:9989'
+    }
+
