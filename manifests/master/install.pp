@@ -7,4 +7,5 @@ class buildbot::master::install {
   ]:
     ensure => present,
   }
+
 }

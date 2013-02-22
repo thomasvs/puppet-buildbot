@@ -1,8 +1,9 @@
 define buildbot::slave::config (
-  $connection="localhost:9989",
-  $botname="example-slave",
-  $botpass="pass"
+  $connection='localhost:9989',
+  $botname='example-slave',
+  $botpass='pass'
 ) {
+
   $owner    = 'buildbot'
   $group    = 'root'
   $mode     = '0644'
@@ -13,24 +14,25 @@ define buildbot::slave::config (
 
   include buildbot::slave::base
 
-  file { "/home/$owner/slave/$name":
+  file { "/home/${owner}/slave/${name}":
+    ensure  => directory,
     owner   => $dirowner,
     group   => $group,
     mode    => $dirmode,
-    ensure  => directory,
   }
 
   exec {"buildbot::slave::config::${name}-create-slave":
-    cwd         => "/home/$owner/slave",
-    user        => "$owner",
-    path        => [ "/bin", "/usr/bin", ],
-    command     => "buildslave create-slave $name $connection $botname $botpass",
+    cwd         => "/home/${owner}/slave",
+    user        => $owner,
+    path        => [ '/bin', '/usr/bin', ],
+    command     => "buildslave create-slave ${name} ${connection} ${botname} ${botpass}",
     refreshonly => false,
-    unless      => "test -f $name/buildbot.tac",
+    unless      => "test -f ${name}/buildbot.tac",
     logoutput   => on_failure,
     require     => [
-      File["/home/$owner/slave"],
+      File["/home/${owner}/slave"],
       Class['buildbot::slave::install']
     ]
   }
+
 }
