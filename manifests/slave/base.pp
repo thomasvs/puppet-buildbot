@@ -6,7 +6,9 @@ class buildbot::slave::base {
   $dirowner = 'buildbot'
   $dirmode  = '0755'
 
-  file { "/home/${owner}/slave":
+  $home = hiera('buildbot::home', "/home/${owner}")
+
+  file { "${home}/slave":
     ensure  => directory,
     owner   => $dirowner,
     group   => $group,

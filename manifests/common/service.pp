@@ -1,6 +1,7 @@
 define buildbot::common::service ($type, $requires=[]) {
 
   $user = 'buildbot'
+  $home = hiera('buildbot::home', "/home/${user}")
 
   case $type {
     'master': { $command = 'buildbot' }
@@ -9,7 +10,7 @@ define buildbot::common::service ($type, $requires=[]) {
   }
 
   exec {"buildbot::${type}::service-${name}":
-    cwd         => "/home/${user}/${type}",
+    cwd         => "${home}/${type}",
     user        => $user,
     path        => [ '/bin', '/usr/bin', ],
     command     => "${command} start ${name}",
@@ -22,7 +23,7 @@ define buildbot::common::service ($type, $requires=[]) {
   # install a cron file to start service on reboot
   file {"/etc/cron.d/buildbot-${type}-service-${name}":
     content => "# created by puppet
-    @reboot ${user} cd /home/${user}/${type}; ${command} start ${name}
+    @reboot ${user} cd ${home}/${type}; ${command} start ${name}
     "
   }
 

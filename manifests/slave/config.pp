@@ -10,11 +10,13 @@ define buildbot::slave::config (
   $dirowner = 'buildbot'
   $dirmode  = '0755'
 
+  $home = hiera('buildbot::home', "/home/${owner}")
+
   include buildbot::slave::install
 
   include buildbot::slave::base
 
-  file { "/home/${owner}/slave/${name}":
+  file { "${home}/slave/${name}":
     ensure  => directory,
     owner   => $dirowner,
     group   => $group,
@@ -22,7 +24,7 @@ define buildbot::slave::config (
   }
 
   exec {"buildbot::slave::config::${name}-create-slave":
-    cwd         => "/home/${owner}/slave",
+    cwd         => "/${home}/slave",
     user        => $owner,
     path        => [ '/bin', '/usr/bin', ],
     command     => "buildslave create-slave ${name} ${connection} ${botname} ${botpass}",
@@ -30,7 +32,7 @@ define buildbot::slave::config (
     unless      => "test -f ${name}/buildbot.tac",
     logoutput   => on_failure,
     require     => [
-      File["/home/${owner}/slave"],
+      File["${home}/slave"],
       Class['buildbot::slave::install']
     ]
   }

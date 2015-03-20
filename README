@@ -33,3 +33,8 @@ Usually a slave is on a different machine than a master.
         connection => 'masterhost:9989'
     }
 
+hiera configuration
+-------------------
+
+buildbot::home: to specify an alternative buildbot home directory
+

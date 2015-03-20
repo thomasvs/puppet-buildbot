@@ -8,11 +8,13 @@ define buildbot::master::config (
   $dirowner = 'buildbot'
   $dirmode  = '0755'
 
+  $home = hiera('buildbot::home', "/home/${owner}")
+
   include buildbot::master::install
 
   include buildbot::master::base
 
-  file { [ "/home/${owner}/master/${name}" ]:
+  file { [ "${home}/master/${name}" ]:
     ensure  => directory,
     owner   => $dirowner,
     group   => $group,
@@ -20,7 +22,7 @@ define buildbot::master::config (
   }
 
   exec {"buildbot::master::config::${name}-create-master":
-    cwd         => "/home/${owner}/master",
+    cwd         => "${home}/master",
     user        => $owner,
     path        => [ '/bin', '/usr/bin', ],
     command     => "buildbot create-master ${name}",
@@ -28,11 +30,11 @@ define buildbot::master::config (
     unless      => "test -f ${name}/state.sqlite",
     logoutput   => on_failure,
     require     => [
-      File["/home/${owner}/master"],
+      File["${home}/master"],
     ]
   }
 
-  file { "/home/${owner}/master/${name}/master.cfg":
+  file { "${home}/master/${name}/master.cfg":
     ensure  => file,
     owner   => $owner,
     group   => $group,
@@ -45,14 +47,14 @@ define buildbot::master::config (
   }
 
   exec {"buildbot-master-config-${name}-reconfig":
-    cwd         => "/home/${owner}/master",
+    cwd         => "${home}/master",
     user        => $owner,
     path        => [ '/bin', '/usr/bin', ],
     command     => "buildbot reconfig ${name}",
     refreshonly => true,
     logoutput   => on_failure,
     require     => [
-      File["/home/${owner}/master"],
+      File["${home}/master"],
     ]
   }
 
