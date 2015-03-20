@@ -1,6 +1,6 @@
 This is a puppet module to set up buildbot masters and slaves.
 
-It was tested on RHEL and CentOS, with buildbot 0.8.7.
+It was tested on RHEL and CentOS, with buildbot 0.8.7 and 0.8.8.
 
 It assumes buildbot is installed from packages.
 It creates a user called buildbot, and creates a layout under
