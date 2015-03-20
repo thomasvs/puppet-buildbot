@@ -1,1 +1,2 @@
  - changing buildslave connection string doesn't recreate the slave config
+ - configure info/{admin,host} properly
