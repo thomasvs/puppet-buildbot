@@ -6,11 +6,13 @@ class buildbot::master::install {
     /^(RedHat|CentOS|Fedora)$/: {
       $pkgs = [
         'buildbot-master',
+        'python-twisted-conch',
       ]
     }
     /^(Ubuntu|Debian)$/: {
       $pkgs = [
         'buildbot',
+        'python-twisted-conch',
       ]
     }
      default: {
