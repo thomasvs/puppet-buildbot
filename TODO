@@ -1,2 +1,4 @@
  - changing buildslave connection string doesn't recreate the slave config
  - configure info/{admin,host} properly
+ - when slave port number changes, make sure buildslave gets changed and
+   restarted.  Probably the same for other attributes.
